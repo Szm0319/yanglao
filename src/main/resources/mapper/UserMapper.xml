@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.yanglao.mapper.UserMapper">
+    <insert id="save">
+        insert into users (username,password,usertype)values (#{username},#{password},#{usertype})
+    </insert>
+    <select id="selectUserByUsername" resultType="java.lang.Boolean">
+        select count(*)>0 from `users` where username=#{username}
+    </select>
+    <select id="selectpassword" resultType="java.lang.String">
+        select password from users where username=#{username}
+    </select>
+    <select id="selectUsertype" resultType="java.lang.String">
+        select usertype from users where username=#{username}
+    </select>
+    <select id="selectUserID" resultType="java.lang.Integer">
+        select id from users where username = #{username}
+    </select>
+    <select id="showall" resultType="com.example.yanglao.entity.User">
+        select * from users
+    </select>
+</mapper>
