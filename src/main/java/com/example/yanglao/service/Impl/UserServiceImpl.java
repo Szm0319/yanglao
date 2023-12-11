@@ -15,8 +15,8 @@ public class UserServiceImpl implements UserService {
     public void save(User user) {
         userMapper.save(user);
     }
-    public Boolean selectUserByUsername(String username){
-        return userMapper.selectUserByUsername(username);
+    public Boolean selectisUserByUsername(String username){
+        return userMapper.selectisUserByUsername(username);
     }
     public String selectpassword(String username){
         return userMapper.selectpassword(username);
@@ -26,5 +26,11 @@ public class UserServiceImpl implements UserService {
     }
     public Integer selectUserID(String username){
         return userMapper.selectUserID(username);
+    }
+    public User selectUserByUsername(String username){
+        return userMapper.selectUserByUsername(username);
+    }
+    public User selectUserById(int userId){
+        return userMapper.selectUserById(userId);
     }
 }

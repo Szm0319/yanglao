@@ -8,8 +8,9 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
     void save(User user);
-    Boolean selectUserByUsername(String username);
-
+    Boolean selectisUserByUsername(String username);
+    User selectUserByUsername(String username);
+    User selectUserById(int userId);
     String selectpassword(String username);
     String selectUsertype(String username);
 

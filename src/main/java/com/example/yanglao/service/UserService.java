@@ -6,10 +6,12 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UserService {
     void save(User user);
-    Boolean selectUserByUsername(String username);
+    Boolean selectisUserByUsername(String username);
     String selectpassword(String username);
 
     String selectUsertype(String username);
     Integer selectUserID(String username);
+    User selectUserByUsername(String username);
+    User selectUserById(int userId);
 
 }

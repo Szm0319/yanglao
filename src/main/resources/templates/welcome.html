@@ -5,6 +5,48 @@
     <title>Title</title>
 </head>
 <body>
-      welcome to yanglao system!
+<button id="sendRequest">发送请求</button>
+<div>
+<label for="username">请输入要查询的ID/用户名</label>
+<input type="text" name="username" id="username">
+<button type="button" onclick="select()">查询</button>
+</div>
+<script>
+    function select(){
+        var uid = document.getElementById('username').value;
+        fetch('http://localhost:8080/api/selectuser', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ username: uid }),
+        }).then(res => res.json())
+            .then(res => alert(res.message))
+            .catch(error => console.error('Error:', error));
+    }
+</script>
+
+<script>
+    document.getElementById('sendRequest').addEventListener('click', function() {
+        const userData = {
+            username: "exampleUser",
+            password: "examplePass",
+            usertype: "manager"
+        };
+
+        fetch('http://localhost:8080/api/adduser', { // 确保使用正确的URL和端口号
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    });
+</script>
 </body>
 </html>
