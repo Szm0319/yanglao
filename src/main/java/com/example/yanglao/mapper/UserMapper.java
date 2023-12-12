@@ -17,5 +17,6 @@ public interface UserMapper {
     Integer selectUserID(String username);
 
     List<User> showall();
+    void deleteUserById(int userId);
 
 }

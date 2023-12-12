@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class Cai {
-    private int id;
+    private int caiId;
     private int price;
-    private String name;
+    private String cainame;
     private String fenlei;
     private String image;
     private int zk;

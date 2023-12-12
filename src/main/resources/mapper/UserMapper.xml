@@ -6,6 +6,9 @@
     <insert id="save" parameterType="com.example.yanglao.entity.User">
         insert into users (username,password,usertype)values (#{username},#{password},#{usertype})
     </insert>
+    <delete id="deleteUserById" parameterType="integer">
+        delete from users where userId = #{userId}
+    </delete>
     <select id="selectisUserByUsername" resultType="java.lang.Boolean">
         select count(*)>0 from `users` where username=#{username}
     </select>

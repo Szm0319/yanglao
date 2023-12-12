@@ -13,5 +13,6 @@ public interface UserService {
     Integer selectUserID(String username);
     User selectUserByUsername(String username);
     User selectUserById(int userId);
+    void deleteUserById(int userId);
 
 }

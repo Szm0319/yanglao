@@ -7,19 +7,89 @@
 <body>
 <button id="sendRequest">发送请求</button>
 <div>
-<label for="username">请输入要查询的ID/用户名</label>
-<input type="text" name="username" id="username">
+<label for="uid">请输入要查询的ID/用户名</label>
+<input type="text" name="uid" id="uid">
 <button type="button" onclick="select()">查询</button>
+<button type="button" onclick="deleteuser()">删除</button>
 </div>
+<button type="button" onclick="showcai()">吃饭</button>
+<table>
+    <thead>
+        <th>用户ID</th>
+        <th>用户名</th>
+        <th>用户密码</th>
+        <th>用户类型</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td id="userId"></td>
+            <td id="username"></td>
+            <td id="password"></td>
+            <td id="usertype"></td>
+        </tr>
+    </tbody>
+</table>
+<table style="width: 80%">
+    <thead>
+    <th>菜品ID</th>
+    <th>菜品名称</th>
+    <th>菜品价格</th>
+    <th>菜品分类</th>
+    </thead>
+    <tbody id="caiList">
+    </tbody>
+</table>
+<script>
+    function deleteuser(){
+        var uid = document.getElementById('uid').value;
+        console.log(uid);
+        fetch('http://localhost:8080/api/deleteuser', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ uid: uid }),
+        }).then(res => res.json())
+            .then(res => alert(res.message))
+            .catch(error => console.error('Error:', error));
+    }
+
+    function showcai() {
+        fetch('http://localhost:8080/api/showcai', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+        }).then(res => res.json())
+            .then(res => {
+                // 假设 res 是一个菜品数组
+                let html = '';
+                res.forEach(cai => {
+                    html += `<tr>
+                        <td>${cai.caiId}</td>
+                        <td>${cai.cainame}</td>
+                        <td>${cai.price}</td>
+                        <td>${cai.fenlei}</td>
+                     </tr>`;
+                });
+                document.getElementById('caiList').innerHTML = html;
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+</script>
 <script>
     function select(){
-        var uid = document.getElementById('username').value;
+        var uid = document.getElementById('uid').value;
+        console.log(uid);
         fetch('http://localhost:8080/api/selectuser', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ username: uid }),
+            body: JSON.stringify({ uid: uid }),
         }).then(res => res.json())
-            .then(res => alert(res.message))
+            .then(res => {
+                document.getElementById('userId').textContent = res.userId;
+                document.getElementById('username').textContent = res.username;
+                document.getElementById('password').textContent = res.password;
+                document.getElementById('usertype').textContent = res.usertype;
+            }
+            )
             .catch(error => console.error('Error:', error));
     }
 </script>

@@ -33,4 +33,7 @@ public class UserServiceImpl implements UserService {
     public User selectUserById(int userId){
         return userMapper.selectUserById(userId);
     }
+    public void deleteUserById(int userId){
+         userMapper.deleteUserById(userId);
+    }
 }

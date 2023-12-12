@@ -2,15 +2,20 @@ package com.example.yanglao.controller;
 
 import com.example.yanglao.entity.User;
 import com.example.yanglao.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+
+
 @Controller
-public class indexController {
+@Slf4j
+public class UserController {
     @Autowired
     private UserService userService;
     @GetMapping("/")
@@ -46,9 +51,24 @@ public class indexController {
         return ResponseEntity.ok().body(response);
     }
     @PostMapping("/api/selectuser")
-    public ResponseEntity<User> select(@RequestParam("uid")int uid){
-        User user1 = userService.selectUserById(uid);
-        return ResponseEntity.ok().body(user1);
+    public ResponseEntity<?> select(@RequestBody Map<String,Integer> body){
+        Integer uid = Integer.valueOf(body.get("uid"));
+        User user = userService.selectUserById(uid);
+        if (user == null) {
+            // 用户未找到，返回自定义消息
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "查无此人");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+        return ResponseEntity.ok().body(user);
+    }
+    @PostMapping("/api/deleteuser")
+    public ResponseEntity<Map<String,String>> deleteuser(@RequestBody Map<String,Integer> body){
+        Integer uid = Integer.valueOf(body.get("uid"));
+        userService.deleteUserById(uid);
+        Map<String,String> response = new HashMap<>();
+        response.put("message","删除成功！");
+        return ResponseEntity.ok().body(response);
     }
 
 }
