@@ -6,6 +6,7 @@ import com.example.yanglao.service.CaiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.util.List;
 @Service
 public class CaiServiceImpl implements CaiService {
@@ -14,6 +15,10 @@ public class CaiServiceImpl implements CaiService {
     @Override
     public Cai selectById(int id) {
         return caiMapper.selectById(id);
+    }
+
+    public Cai selectByCainame(String cainame){
+        return caiMapper.selectByCainame(cainame);
     }
 
 

@@ -1,7 +1,10 @@
 package com.example.yanglao.service;
 
+import com.example.yanglao.entity.Cai;
 import com.example.yanglao.entity.User;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public interface UserService {
@@ -14,5 +17,5 @@ public interface UserService {
     User selectUserByUsername(String username);
     User selectUserById(int userId);
     void deleteUserById(int userId);
-
+    List<User> showall();
 }

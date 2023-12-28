@@ -5,11 +5,13 @@ import com.example.yanglao.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -27,7 +29,12 @@ public class UserController {
 
         return "welcome";
     }
-    @PostMapping("/api/adduser")
+    @GetMapping("/user/showall")
+    public ResponseEntity<List<User>> showuser(){
+        List<User> users = userService.showall();
+        return ResponseEntity.ok().body(users);
+    }
+    @PostMapping("/user/add")
     public ResponseEntity<Map<String,String>> addusers(@RequestBody User user){
         User user1 = new User();
         user1.setUsertype(user.getUsertype());
@@ -38,7 +45,7 @@ public class UserController {
         response.put("message","新用户已创建");
         return ResponseEntity.ok().body(response);
     }
-    @PostMapping("/api/updateuser")
+    @PostMapping("/user/update")
     public ResponseEntity<Map<String,String>> update(@RequestBody User user){
         Integer uid = user.getUserId();
         User user1 = userService.selectUserById(uid);
@@ -50,7 +57,8 @@ public class UserController {
         System.out.println(uid);
         return ResponseEntity.ok().body(response);
     }
-    @PostMapping("/api/selectuser")
+    /*通过用户id查找*/
+    @PostMapping("/user/select")
     public ResponseEntity<?> select(@RequestBody Map<String,Integer> body){
         Integer uid = Integer.valueOf(body.get("uid"));
         User user = userService.selectUserById(uid);
@@ -62,7 +70,7 @@ public class UserController {
         }
         return ResponseEntity.ok().body(user);
     }
-    @PostMapping("/api/deleteuser")
+    @PostMapping("/user/delete")
     public ResponseEntity<Map<String,String>> deleteuser(@RequestBody Map<String,Integer> body){
         Integer uid = Integer.valueOf(body.get("uid"));
         userService.deleteUserById(uid);

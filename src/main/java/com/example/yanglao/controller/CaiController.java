@@ -7,9 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,14 +18,16 @@ import java.util.Map;
 public class CaiController {
     @Autowired
     private CaiService caiService;
-    @PostMapping("api/showcai")
-    public ResponseEntity<List<Cai>> showcai(){
+
+    @GetMapping("/cai/showall")
+    public ResponseEntity<List<Cai>> showcai() {
         List<Cai> caiList = caiService.selectAll();
         log.info(caiList.toString());
         return ResponseEntity.ok().body(caiList);
     }
-    @PostMapping("api/addcai")
-    public ResponseEntity<Map<String,String>> addcai(@RequestBody Cai cai){
+
+    @PostMapping("/cai/add")
+    public ResponseEntity<Map<String, String>> addcai(@RequestBody Cai cai) {
         Cai cai1 = new Cai();
         cai1.setCainame(cai.getCainame());
         cai1.setPrice(cai.getPrice());
@@ -42,4 +42,30 @@ public class CaiController {
         response.put("message", "添加成功！");
         return ResponseEntity.ok().body(response);
     }
+
+    @PostMapping("/cai/delete")
+    public ResponseEntity<Map<String, String>> deletecai(@RequestParam("id") int id) {
+        caiService.deleteById(id);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "删除成功");
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/cai/update")
+    public ResponseEntity<Map<String, String>> updatecai(@RequestBody Cai cai) {
+        Cai seletecai = caiService.selectById(cai.getCaiId());
+        seletecai.setCainame(cai.getCainame());
+        seletecai.setPrice(cai.getPrice());
+        seletecai.setFenlei(cai.getFenlei());
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "修改成功");
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/cai/select")
+    public ResponseEntity<Cai> selectcai(@RequestParam String cainame) {
+        Cai cai = caiService.selectByCainame(cainame);
+        return ResponseEntity.ok(cai);
+    }
+
 }

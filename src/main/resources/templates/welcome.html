@@ -5,15 +5,20 @@
     <title>Title</title>
 </head>
 <body>
-<button id="sendRequest">发送请求</button>
+<button id="sendRequest">添加用户</button>
+<button id="showmedical" onclick="showmedical()">展示就医陪同</button>
+<button id="showusers" onclick="showusers()">展示用户</button>
+<button id="showcai" onclick="showcai()">展示菜品</button>
+<button id="showcustomers" onclick="showcustomers()">展示老人</button>
+<button id="showorders" onclick="showorders()">展示订单</button>
 <div>
 <label for="uid">请输入要查询的ID/用户名</label>
 <input type="text" name="uid" id="uid">
 <button type="button" onclick="select()">查询</button>
 <button type="button" onclick="deleteuser()">删除</button>
 </div>
-<button type="button" onclick="showcai()">吃饭</button>
-<table>
+<button type="button" onclick="addcai()">加菜</button>
+<table style="width: 80%">
     <thead>
         <th>用户ID</th>
         <th>用户名</th>
@@ -31,6 +36,16 @@
 </table>
 <table style="width: 80%">
     <thead>
+    <th>用户ID</th>
+    <th>用户名</th>
+    <th>用户密码</th>
+    <th>用户类型</th>
+    </thead>
+    <tbody id="userList">
+    </tbody>
+</table>
+<table style="width: 80%">
+    <thead>
     <th>菜品ID</th>
     <th>菜品名称</th>
     <th>菜品价格</th>
@@ -39,22 +54,68 @@
     <tbody id="caiList">
     </tbody>
 </table>
+<table style="width: 80%">
+    <thead>
+    <th>老人ID</th>
+    <th>姓名</th>
+    <th>性别</th>
+    <th>备注</th>
+    </thead>
+    <tbody id="customerList">
+    </tbody>
+</table>
+<table style="width: 80%">
+    <thead>
+    <th>订单ID</th>
+    <th>顾客姓名</th>
+    <th>总价格</th>
+    <th>订单状态</th>
+    </thead>
+    <tbody id="orderList">
+    </tbody>
+</table>
 <script>
-    function deleteuser(){
-        var uid = document.getElementById('uid').value;
-        console.log(uid);
-        fetch('http://localhost:8080/api/deleteuser', {
-            method: 'POST',
+    function showusers() {
+        fetch('http://localhost:8080/user/showall', {
+            method: 'GET',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ uid: uid }),
         }).then(res => res.json())
-            .then(res => alert(res.message))
+            .then(res => {
+                let html = '';
+                res.forEach(user => {
+                    html += `<tr>
+                        <td>${user.userId}</td>
+                        <td>${user.username}</td>
+                        <td>${user.password}</td>
+                        <td>${user.usertype}</td>
+                     </tr>`;
+                });
+                document.getElementById('userList').innerHTML = html;
+            })
             .catch(error => console.error('Error:', error));
     }
-
+    function showorders() {
+        fetch('http://localhost:8080/order/showall', {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'},
+        }).then(res => res.json())
+            .then(res => {
+                let html = '';
+                res.forEach(order => {
+                    html += `<tr>
+                        <td>${order.orderId}</td>
+                        <td>${order.customername}</td>
+                        <td>${order.totalprice}</td>
+                        <td>${order.status}</td>
+                     </tr>`;
+                });
+                document.getElementById('orderList').innerHTML = html;
+            })
+            .catch(error => console.error('Error:', error));
+    }
     function showcai() {
-        fetch('http://localhost:8080/api/showcai', {
-            method: 'POST',
+        fetch('http://localhost:8080/cai/showall', {
+            method: 'GET',
             headers: {'Content-Type': 'application/json'},
         }).then(res => res.json())
             .then(res => {
@@ -72,13 +133,77 @@
             })
             .catch(error => console.error('Error:', error));
     }
+    function showcustomers() {
+        fetch('http://localhost:8080/customer/showall', {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'},
+        }).then(res => res.json())
+            .then(res => {
+                let html = '';
+                res.forEach(customer => {
+                    html += `<tr>
+                        <td>${customer.customerId}</td>
+                        <td>${customer.name}</td>
+                        <td>${customer.sex}</td>
+                        <td>${customer.notes}</td>
+                     </tr>`;
+                });
+                document.getElementById('customerList').innerHTML = html;
+            })
+            .catch(error => console.error('Error:', error));
+    }
+    function showmedical() {
+        fetch('http://localhost:8080/customer/medical', {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'},
+        }).then(res => res.json())
+            .then(res => {
+                let html = '';
+                res.forEach(customer => {
+                    html += `<tr>
+                        <td>${customer.customerId}</td>
+                        <td>${customer.name}</td>
+                        <td>${customer.sex}</td>
+                        <td>${customer.notes}</td>
+                     </tr>`;
+                });
+                document.getElementById('customerList').innerHTML = html;
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
+<script>
+    function deleteuser(){
+        var uid = document.getElementById('uid').value;
+        console.log(uid);
+        fetch('http://localhost:8080/deleteuser', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ uid: uid }),
+        }).then(res => res.json())
+            .then(res => alert(res.message))
+            .catch(error => console.error('Error:', error));
+    }
 
+
+        function addcai(){
+            const data={
+                cainame:'小葱拌豆腐',
+                price:38,
+                fenlei:'蔬菜'
+            }
+            fetch('http://localhost:8080/addcai',{
+                method:'POST',
+                headers:{'Content-type':'application/json'},
+                body:JSON.stringify(data)
+            })
+        }
 </script>
 <script>
     function select(){
         var uid = document.getElementById('uid').value;
         console.log(uid);
-        fetch('http://localhost:8080/api/selectuser', {
+        fetch('http://localhost:8080/selectuser', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ uid: uid }),
@@ -102,7 +227,7 @@
             usertype: "manager"
         };
 
-        fetch('http://localhost:8080/api/adduser', { // 确保使用正确的URL和端口号
+        fetch('http://localhost:8080/adduser', { // 确保使用正确的URL和端口号
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

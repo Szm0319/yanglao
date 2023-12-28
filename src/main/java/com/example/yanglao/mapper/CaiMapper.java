@@ -8,6 +8,7 @@ import java.util.List;
 @Mapper
 public interface CaiMapper {
     Cai selectById(int id);
+    Cai selectByCainame(String cainame);
     void deleteById(int id);
     void updateById(Cai cai);
 

@@ -5,12 +5,30 @@
 <mapper namespace="com.example.yanglao.mapper.OrderMapper">
 
     <insert id="insertOrder" parameterType="com.example.yanglao.entity.Order">
-        insert into orders (user_id, status, order_date, total_price) values (#{user_id}, #{status}, #{order_date},#{total_price})
+        insert into orders (userId, status, ordertime, totalprice) values (#{userId}, #{status}, #{ordertime},#{totalprice})
     </insert>
     <update id="updataOrderPriceByid">
-        update orders set total_price = #{total_price} where order_id = #{order_id}
+        update orders set totalprice = #{totalprice} where orderId = #{orderId}
+    </update>
+    <update id="updateOrderStatus">
+        update orders set status = #{status} where orderId = #{orderId}
+    </update>
+    <update id="updateemployeeId">
+        update orders set employeeId = #{employeeId} where orderId = #{orderId}
+    </update>
+    <update id="updateSendtime">
+        update orders set sendtime = #{sendtime} where orderId = #{orderId}
     </update>
     <select id="selectIdbyuser" resultType="java.lang.Integer">
-        select order_id from orders where user_id = #{user_id} order by order_date desc Limit 1
+        select orderId from orders where userId = #{user_id} order by ordertime desc Limit 1
+    </select>
+    <select id="selectPriceByid" resultType="java.lang.Double">
+        select totalprice form orders where orderId=#{orderId} order by ordertime desc Limit 1
+    </select>
+    <select id="selectOrderByid" resultType="com.example.yanglao.entity.Order">
+        select * from orders where orderId=#{orderId} order by ordertime desc Limit 1
+    </select>
+    <select id="showall" resultType="com.example.yanglao.entity.Order">
+        select * from orders order by ordertime desc
     </select>
 </mapper>

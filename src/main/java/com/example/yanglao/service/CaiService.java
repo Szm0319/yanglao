@@ -10,6 +10,7 @@ import java.util.List;
 public interface CaiService extends CaiMapper{
     @Override
     Cai selectById(int id);
+    Cai selectByCainame(String cainame);
 
     @Override
     void deleteById(int id);
